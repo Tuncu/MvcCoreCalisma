@@ -1,17 +1,10 @@
 ﻿@model Abc.Northwind.MvcWebUI.Models.ProductListViewModel
 @{
-    Layout = null;
+    Layout = "~/Views/_Layout.cshtml";
 }
 
-<!DOCTYPE html>
 
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Index</title>
-</head>
-<body>
-    <table>
+    <table class="table table-responsive">
         <tr>
             <td>Ürün Adı</td>
             <td>Ürün Fiyatı</td>
@@ -26,5 +19,3 @@
             </tr>
         }
     </table>
-</body>
-</html>

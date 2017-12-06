@@ -6,6 +6,7 @@ using Abc.Northwind.Business.Abstract;
 using Abc.Northwind.Business.Concrate;
 using Abc.Northwind.DataAccess.Abstract;
 using Abc.Northwind.DataAccess.Concrate.EntityFramework;
+using Abc.Northwind.MvcWebUI.Middlewares;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -21,6 +22,8 @@ namespace Abc.Northwind.MvcWebUI
         {
             services.AddScoped<IProductService, ProductManager>();
             services.AddScoped<IProductDal, EfProductDal>();
+            services.AddScoped<ICategoryService, CategoryManager>();
+            services.AddScoped<ICategoryDal, EfCategoryDal>();
             services.AddMvc();
         }
 
@@ -31,7 +34,8 @@ namespace Abc.Northwind.MvcWebUI
             {
                 app.UseDeveloperExceptionPage();
             }
-
+            app.UseFileServer();
+            app.UseNodeModules(env.ContentRootPath);
             app.UseMvcWithDefaultRoute();
         }
     }
