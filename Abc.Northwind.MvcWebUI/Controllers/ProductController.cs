@@ -22,10 +22,19 @@ namespace Abc.Northwind.MvcWebUI.Controllers
 
             ProductListViewModel model = new ProductListViewModel
             {
-                Products = products.Skip((page - 1) * pageSize).Take(pageSize).ToList()
+                Products = products.Skip((page - 1) * pageSize).Take(pageSize).ToList(),
+                PageCount = (int)Math.Ceiling((double)products.Count / pageSize),
+                PageSize = pageSize,
+                CurrentCategory=category,
+                CurrentPage=page
             };
 
             return View(model);
         }
+
+        //public IActionResult AddToCart()
+        //{
+
+        //}
     }
 }
