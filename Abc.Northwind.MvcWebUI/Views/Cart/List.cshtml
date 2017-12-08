@@ -1,0 +1,53 @@
+﻿@model Abc.Northwind.MvcWebUI.Models.CartListViewModel
+@{
+    ViewData["Title"] = "List";
+    Layout = "~/Views/_Layout.cshtml";
+}
+
+<h2>Sepetiniz</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Ürün Adı</th>
+            <th>Ürün Fiyatı</th>
+            <th>Stokdaki Miktar</th>
+            <th>Miktar</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+      @foreach (var item in Model.Cart.CartLines)
+      {
+        <tr>
+            <td>@item.Product.ProductName</td>
+            <td>@item.Product.UnitPrice.ToString("C2")</td>
+            <td>@item.Product.UnitsInStock</td>
+            <td>@item.Quantity</td>
+            <td class="text-right"><a class="btn btn-xs btn-danger" asp-controller="Cart" asp-action="Remove" asp-all-route-productId="@item.Product.ProductId"><span class="glyphicon glyphicon-remove"></span> Çıkar</a></td>
+        </tr>
+      }
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td><h3>Toplam</h3></td>
+            <td>
+                <h3>
+                    <strong>@Model.Cart.Total.ToString("C2")</strong>
+                </h3>
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>
+                <a asp-controller="Product" asp-action="Index" class="btn btn-xs btn-default"><span class="glyphicon glyphicon-shopping-cart"></span> Alışverişe Devam Et</a>
+            </td>
+            <td>
+                <a asp-controller="Cart" asp-action="Complete" class="btn btn-xs btn-success"><span class="glyphicon glyphicon-shopping-play"></span> Alışverişi Tamamla...</a>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
