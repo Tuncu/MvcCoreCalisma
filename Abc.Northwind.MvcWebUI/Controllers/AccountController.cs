@@ -30,8 +30,66 @@ namespace Abc.Northwind.MvcWebUI.Controllers
         [HttpPost,ValidateAntiForgeryToken]
         public IActionResult Register(RegisterViewModel registerViewModel)
         {
+            if(ModelState.IsValid)
+            {
+                CustomIdentityUser user = new CustomIdentityUser
+                {
+                    UserName = registerViewModel.UserName,
+                    Email = registerViewModel.Email
+                };
 
+                IdentityResult result = _userManager.CreateAsync(user, registerViewModel.Password).Result;
+
+                if(result.Succeeded)
+                {
+                    if(!_roleManager.RoleExistsAsync("Admin").Result)
+                    {
+                        CustomIdentityRole role = new CustomIdentityRole
+                        {
+                            Name = "Admin",
+                        };
+
+                        IdentityResult roleResult = _roleManager.CreateAsync(role).Result;
+                        if(!roleResult.Succeeded)
+                        {
+                            ModelState.AddModelError("", "Role eklenemedi");
+                            return View(registerViewModel);
+                        }
+                    }
+
+                    _userManager.AddToRoleAsync(user, "Admin").Wait();
+                    return RedirectToAction("Login", "Account");
+                }               
+            }
+
+            return View(registerViewModel);
+        }
+
+        public IActionResult Login()
+        {
             return View();
+        }
+
+        [HttpPost,ValidateAntiForgeryToken]
+        public IActionResult Login(LoginViewModel loginViewModel)
+        {
+            if(ModelState.IsValid)
+            {
+                var result = _signInManager.PasswordSignInAsync(loginViewModel.UserName, loginViewModel.Password, loginViewModel.Remember, false).Result;
+
+                if (result.Succeeded)
+                    return RedirectToAction("Index", "Admin");
+
+                ModelState.AddModelError("", "Geçersiz giriş");
+            }
+            return View(loginViewModel);
+        }
+
+        
+        public IActionResult LogOff()
+        {
+            _signInManager.SignOutAsync().Wait();
+            return RedirectToAction("Login");
         }
 
         public IActionResult Index()

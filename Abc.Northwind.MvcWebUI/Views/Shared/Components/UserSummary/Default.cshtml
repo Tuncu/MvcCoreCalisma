@@ -1,0 +1,18 @@
+﻿@model Abc.Northwind.MvcWebUI.Models.UserDetailsViewModel
+
+
+<ul class="dropdown-menu">
+
+    @if (!string.IsNullOrEmpty(Model.UserName))
+    {
+        <li>
+            <a>Merhaba @Model.UserName</a>
+        </li>
+        <li>
+            <a asp-controller="Account" asp-action="LogOff">Çıkış</a>
+        </li>
+    }
+
+
+</ul>
+
