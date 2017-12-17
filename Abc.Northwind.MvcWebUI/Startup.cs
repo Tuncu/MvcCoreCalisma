@@ -6,11 +6,14 @@ using Abc.Northwind.Business.Abstract;
 using Abc.Northwind.Business.Concrate;
 using Abc.Northwind.DataAccess.Abstract;
 using Abc.Northwind.DataAccess.Concrate.EntityFramework;
+using Abc.Northwind.MvcWebUI.Entities;
 using Abc.Northwind.MvcWebUI.Middlewares;
 using Abc.Northwind.MvcWebUI.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Abc.Northwind.MvcWebUI
@@ -28,6 +31,8 @@ namespace Abc.Northwind.MvcWebUI
             services.AddSingleton<ICartSessionService, CartSessionService>();
             services.AddSingleton<ICartService, CartService>();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddDbContext<CustomIdentityDbContext>(options => options.UseSqlServer("server=.;database=NORTHWND;uid=sa;pwd=1"));
+            services.AddIdentity<CustomIdentityUser, CustomIdentityRole>().AddEntityFrameworkStores<CustomIdentityDbContext>().AddDefaultTokenProviders();
             services.AddSession();
             services.AddDistributedMemoryCache();          
             services.AddMvc();
@@ -42,6 +47,8 @@ namespace Abc.Northwind.MvcWebUI
             }
             app.UseFileServer();
             app.UseNodeModules(env.ContentRootPath);
+
+            app.UseIdentity();
             app.UseSession();
             app.UseMvcWithDefaultRoute();
         }
